@@ -79,72 +79,72 @@
 //        return Vector3.zero;
 //    }
 ////}
-//using UnityEngine;
+using UnityEngine;
 
-//public class PlayerMovement : MonoBehaviour
-//{
-//    public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
-//    public PlayerType playerType;
-//    public float moveSpeed = 5f;
-//    public int gamepadNumber = 1;
+public class PlayerMovement : MonoBehaviour
+{
+public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
+public PlayerType playerType;
+public float moveSpeed = 5f;
+public int gamepadNumber = 1;
 
-//    void Update()
-//    {
-//        string horizontalAxis = "J" + gamepadNumber + "Horizontal";
-//        string verticalAxis = "J" + gamepadNumber + "Vertical";
+void Update()
+{
+    string horizontalAxis = "J" + gamepadNumber + "Horizontal";
+    string verticalAxis = "J" + gamepadNumber + "Vertical";
 
-//        float horizontal = Input.GetAxis(horizontalAxis);
-//        float vertical = Input.GetAxis(verticalAxis);
+    float horizontal = Input.GetAxis(horizontalAxis);
+    float vertical = Input.GetAxis(verticalAxis);
 
-//        switch (playerType)
-//        {
-//            case PlayerType.LeftOnly:
-//                HandleLeftOnlyMovement(horizontal);
-//                break;
-//            case PlayerType.RightOnly:
-//                HandleRightOnlyMovement(horizontal);
-//                break;
-//            case PlayerType.ForwardBackward:
-//                HandleForwardBackwardMovement(vertical);
-//                break;
-//        }
-//    }
+    switch (playerType)
+    {
+        case PlayerType.LeftOnly:
+            HandleLeftOnlyMovement(horizontal);
+            break;
+        case PlayerType.RightOnly:
+            HandleRightOnlyMovement(horizontal);
+            break;
+        case PlayerType.ForwardBackward:
+            HandleForwardBackwardMovement(vertical);
+            break;
+    }
+}
 
-//    void HandleLeftOnlyMovement(float horizontal)
-//    {
-//        // Player 1 - moves only left relative to facing direction
-//        if (horizontal < -0.1f)
-//        {
-//            Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
-//            transform.Translate(movement, Space.World);
-//        }
-//    }
+void HandleLeftOnlyMovement(float horizontal)
+{
+       // Player 1 - moves only left relative to facing direction
+    if (horizontal < -0.1f)
+    {
+           Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
+        transform.Translate(movement, Space.World);
+    }
+}
 
-//    void HandleRightOnlyMovement(float horizontal)
-//    {
-//        // Player 2 - moves only right relative to facing direction
-//        if (horizontal > 0.1f)
-//        {
-//            Vector3 movement = transform.right * moveSpeed * horizontal * Time.deltaTime;
-//            transform.Translate(movement, Space.World);
-//        }
-//    }
+void HandleRightOnlyMovement(float horizontal)
+{
+       // Player 2 - moves only right relative to facing direction
+    if (horizontal > 0.1f)
+    {
+           Vector3 movement = transform.right * moveSpeed * horizontal * Time.deltaTime;
+        transform.Translate(movement, Space.World);
+    }
+}
 
-//    void HandleForwardBackwardMovement(float vertical)
-//    {
-//        // Player 3 - moves forward/backward relative to facing direction
-//        if (vertical > 0.1f) // Forward
-//        {
-//            Vector3 movement = transform.forward * moveSpeed * vertical * Time.deltaTime;
-//            transform.Translate(movement, Space.World);
-//        }
-//        else if (vertical < -0.1f) // Backward
-//        {
-//            Vector3 movement = -transform.forward * moveSpeed * Mathf.Abs(vertical) * Time.deltaTime;
-//            transform.Translate(movement, Space.World);
-//        }
-//    }
-//}
+void HandleForwardBackwardMovement(float vertical)
+{
+       // Player 3 - moves forward/backward relative to facing direction
+       if (vertical > 0.1f) // Forward
+    {
+           Vector3 movement = transform.forward * moveSpeed * vertical * Time.deltaTime;
+        transform.Translate(movement, Space.World);
+    }
+       else if (vertical < -0.1f) // Backward
+    {
+           Vector3 movement = -transform.forward * moveSpeed * Mathf.Abs(vertical) * Time.deltaTime;
+        transform.Translate(movement, Space.World);
+    }
+}
+}
 //using UnityEngine;
 
 //public class PlayerMovement : MonoBehaviour
@@ -264,137 +264,137 @@
 //        }
 //    }
 //}
-using UnityEngine;
+// using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
-{
-    public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
-    public PlayerType playerType;
-    public float moveForce = 10f;
-    public float maxSpeed = 5f;
-    public int gamepadNumber = 1;
-    public CarryObject carryObject; // Assign in inspector
+// public class PlayerMovement : MonoBehaviour
+// {
+//     public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
+//     public PlayerType playerType;
+//     public float moveForce = 10f;
+//     public float maxSpeed = 5f;
+//     public int gamepadNumber = 1;
+//     public CarryObject carryObject; // Assign in inspector
 
-    private Rigidbody rb;
-    private bool isCarrying = false;
+//     private Rigidbody rb;
+//     private bool isCarrying = false;
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        // Ensure Rigidbody is set up properly
-        rb.linearDamping = 1f;
-        rb.angularDamping = 2f;
-        rb.mass = 1f;
+//     void Start()
+//     {
+//         rb = GetComponent<Rigidbody>();
+//         // Ensure Rigidbody is set up properly
+//         rb.linearDamping = 1f;
+//         rb.angularDamping = 2f;
+//         rb.mass = 1f;
 
-        // Auto-connect to the carry object on start
-        if (carryObject != null)
-        {
-            ConnectToObject(carryObject);
-        }
-        else
-        {
-            // Try to find the carry object automatically
-            carryObject = FindObjectOfType<CarryObject>();
-            if (carryObject != null)
-            {
-                ConnectToObject(carryObject);
-            }
-        }
-    }
+//         // Auto-connect to the carry object on start
+//         if (carryObject != null)
+//         {
+//             ConnectToObject(carryObject);
+//         }
+//         else
+//         {
+//             // Try to find the carry object automatically
+//             carryObject = FindObjectOfType<CarryObject>();
+//             if (carryObject != null)
+//             {
+//                 ConnectToObject(carryObject);
+//             }
+//         }
+//     }
 
-    void Update()
-    {
-        string horizontalAxis = "J" + gamepadNumber + "Horizontal";
-        string verticalAxis = "J" + gamepadNumber + "Vertical";
+//     void Update()
+//     {
+//         string horizontalAxis = "J" + gamepadNumber + "Horizontal";
+//         string verticalAxis = "J" + gamepadNumber + "Vertical";
 
-        float horizontal = Input.GetAxis(horizontalAxis);
-        float vertical = Input.GetAxis(verticalAxis);
+//         float horizontal = Input.GetAxis(horizontalAxis);
+//         float vertical = Input.GetAxis(verticalAxis);
 
-        switch (playerType)
-        {
-            case PlayerType.LeftOnly:
-                HandleLeftOnlyMovement(horizontal);
-                break;
-            case PlayerType.RightOnly:
-                HandleRightOnlyMovement(horizontal);
-                break;
-            case PlayerType.ForwardBackward:
-                HandleForwardBackwardMovement(vertical);
-                break;
-        }
-    }
+//         switch (playerType)
+//         {
+//             case PlayerType.LeftOnly:
+//                 HandleLeftOnlyMovement(horizontal);
+//                 break;
+//             case PlayerType.RightOnly:
+//                 HandleRightOnlyMovement(horizontal);
+//                 break;
+//             case PlayerType.ForwardBackward:
+//                 HandleForwardBackwardMovement(vertical);
+//                 break;
+//         }
+//     }
 
-    void HandleLeftOnlyMovement(float horizontal)
-    {
-        if (isCarrying && horizontal < -0.1f && rb.linearVelocity.magnitude < maxSpeed)
-        {
-            Vector3 forceDirection = -transform.right * moveForce * Mathf.Abs(horizontal);
-            rb.AddForce(forceDirection);
-        }
-    }
+//     void HandleLeftOnlyMovement(float horizontal)
+//     {
+//         if (isCarrying && horizontal < -0.1f && rb.linearVelocity.magnitude < maxSpeed)
+//         {
+//             Vector3 forceDirection = -transform.right * moveForce * Mathf.Abs(horizontal);
+//             rb.AddForce(forceDirection);
+//         }
+//     }
 
-    void HandleRightOnlyMovement(float horizontal)
-    {
-        if (isCarrying && horizontal > 0.1f && rb.linearVelocity.magnitude < maxSpeed)
-        {
-            Vector3 forceDirection = transform.right * moveForce * horizontal;
-            rb.AddForce(forceDirection);
-        }
-    }
+//     void HandleRightOnlyMovement(float horizontal)
+//     {
+//         if (isCarrying && horizontal > 0.1f && rb.linearVelocity.magnitude < maxSpeed)
+//         {
+//             Vector3 forceDirection = transform.right * moveForce * horizontal;
+//             rb.AddForce(forceDirection);
+//         }
+//     }
 
-    void HandleForwardBackwardMovement(float vertical)
-    {
-        if (isCarrying && Mathf.Abs(vertical) > 0.1f && rb.linearVelocity.magnitude < maxSpeed)
-        {
-            Vector3 forceDirection = transform.forward * moveForce * vertical;
-            rb.AddForce(forceDirection);
-        }
-    }
+//     void HandleForwardBackwardMovement(float vertical)
+//     {
+//         if (isCarrying && Mathf.Abs(vertical) > 0.1f && rb.linearVelocity.magnitude < maxSpeed)
+//         {
+//             Vector3 forceDirection = transform.forward * moveForce * vertical;
+//             rb.AddForce(forceDirection);
+//         }
+//     }
 
-    public void ConnectToObject(CarryObject carryObj)
-    {
-        carryObject = carryObj;
-        carryObj.ConnectPlayer(rb, GetPlayerIndex());
-        isCarrying = true;
+//     public void ConnectToObject(CarryObject carryObj)
+//     {
+//         carryObject = carryObj;
+//         carryObj.ConnectPlayer(rb, GetPlayerIndex());
+//         isCarrying = true;
 
-        // Adjust physics when carrying
-        rb.linearDamping = 2f;
-        rb.angularDamping = 3f;
-    }
+//         // Adjust physics when carrying
+//         rb.linearDamping = 2f;
+//         rb.angularDamping = 3f;
+//     }
 
-    public void DisconnectFromObject()
-    {
-        if (carryObject != null && isCarrying)
-        {
-            carryObject.DisconnectPlayer(rb);
-            carryObject = null;
-            isCarrying = false;
+//     public void DisconnectFromObject()
+//     {
+//         if (carryObject != null && isCarrying)
+//         {
+//             carryObject.DisconnectPlayer(rb);
+//             carryObject = null;
+//             isCarrying = false;
 
-            // Reset physics
-            rb.linearDamping = 1f;
-            rb.angularDamping = 2f;
-        }
-    }
+//             // Reset physics
+//             rb.linearDamping = 1f;
+//             rb.angularDamping = 2f;
+//         }
+//     }
 
-    public int GetPlayerIndex()
-    {
-        // Return index based on player type for positioning
-        switch (playerType)
-        {
-            case PlayerType.LeftOnly: return 0;
-            case PlayerType.RightOnly: return 1;
-            case PlayerType.ForwardBackward: return 2;
-            default: return 0;
-        }
-    }
+//     public int GetPlayerIndex()
+//     {
+//         // Return index based on player type for positioning
+//         switch (playerType)
+//         {
+//             case PlayerType.LeftOnly: return 0;
+//             case PlayerType.RightOnly: return 1;
+//             case PlayerType.ForwardBackward: return 2;
+//             default: return 0;
+//         }
+//     }
 
-    // Optional: Visual debug to show connection status
-    void OnGUI()
-    {
-        if (isCarrying)
-        {
-            GUI.Label(new Rect(10, 10 + (gamepadNumber * 30), 300, 30),
-                     $"Player {gamepadNumber}: Connected to object");
-        }
-    }
-}
+//     // Optional: Visual debug to show connection status
+//     void OnGUI()
+//     {
+//         if (isCarrying)
+//         {
+//             GUI.Label(new Rect(10, 10 + (gamepadNumber * 30), 300, 30),
+//                      $"Player {gamepadNumber}: Connected to object");
+//         }
+//     }
+// }
