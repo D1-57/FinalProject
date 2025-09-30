@@ -79,72 +79,225 @@
 //        return Vector3.zero;
 //    }
 ////}
+// using UnityEngine;
+
+// public class PlayerMovement : MonoBehaviour
+// {
+//     public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
+//     public PlayerType playerType;
+//     public float moveSpeed = 5f;
+//     public int gamepadNumber = 1;
+
+//     void Update()
+//     {
+//         string horizontalAxis = "J" + gamepadNumber + "Horizontal";
+//         string verticalAxis = "J" + gamepadNumber + "Vertical";
+
+//         float horizontal = Input.GetAxis(horizontalAxis);
+//         float vertical = Input.GetAxis(verticalAxis);
+
+//         switch (playerType)
+//         {
+//             case PlayerType.LeftOnly:
+//                 HandleLeftOnlyMovement(horizontal);
+//                 break;
+//             case PlayerType.RightOnly:
+//                 HandleRightOnlyMovement(horizontal);
+//                 break;
+//             case PlayerType.ForwardBackward:
+//                 HandleForwardBackwardMovement(vertical);
+//                 break;
+//         }
+//     }
+
+//     void HandleLeftOnlyMovement(float horizontal)
+//     {
+//         // Player 1 - moves only left relative to facing direction
+//         if (horizontal < -0.1f)
+//         {
+//             Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
+//             transform.Translate(movement, Space.World);
+//         }
+//     }
+
+//     void HandleRightOnlyMovement(float horizontal)
+//     {
+//         // Player 2 - moves only right relative to facing direction
+//         if (horizontal > 0.1f)
+//         {
+//             Vector3 movement = transform.right * moveSpeed * horizontal * Time.deltaTime;
+//             transform.Translate(movement, Space.World);
+//         }
+//     }
+
+//     void HandleForwardBackwardMovement(float vertical)
+//     {
+//         // Player 3 - moves forward/backward relative to facing direction
+//         if (vertical > 0.1f) // Forward
+//         {
+//             Vector3 movement = transform.forward * moveSpeed * vertical * Time.deltaTime;
+//             transform.Translate(movement, Space.World);
+//         }
+//         else if (vertical < -0.1f) // Backward
+//         {
+//             Vector3 movement = -transform.forward * moveSpeed * Mathf.Abs(vertical) * Time.deltaTime;
+//             transform.Translate(movement, Space.World);
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
-public PlayerType playerType;
-public float moveSpeed = 5f;
-public int gamepadNumber = 1;
+    public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
+    public PlayerType playerType;
+    public float moveSpeed = 5f;
+    public int gamepadNumber = 1;
+    
+    private Animator animator;
+    private bool isMoving = false;
 
-void Update()
-{
-    string horizontalAxis = "J" + gamepadNumber + "Horizontal";
-    string verticalAxis = "J" + gamepadNumber + "Vertical";
-
-    float horizontal = Input.GetAxis(horizontalAxis);
-    float vertical = Input.GetAxis(verticalAxis);
-
-    switch (playerType)
+    void Start()
     {
-        case PlayerType.LeftOnly:
-            HandleLeftOnlyMovement(horizontal);
-            break;
-        case PlayerType.RightOnly:
-            HandleRightOnlyMovement(horizontal);
-            break;
-        case PlayerType.ForwardBackward:
-            HandleForwardBackwardMovement(vertical);
-            break;
+        // Get the Animator component attached to the same GameObject
+        animator = GetComponent<Animator>();
+        
+        // If there's no Animator on this object, try to find it in children
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
+        
+        // Log warning if no animator found
+        if (animator == null)
+        {
+            Debug.LogWarning("No Animator component found on " + gameObject.name);
+        }
+    }
+
+    void Update()
+    {
+        string horizontalAxis = "J" + gamepadNumber + "Horizontal";
+        string verticalAxis = "J" + gamepadNumber + "Vertical";
+
+        float horizontal = Input.GetAxis(horizontalAxis);
+        float vertical = Input.GetAxis(verticalAxis);
+
+        bool wasMoving = isMoving;
+        isMoving = false;
+
+        switch (playerType)
+        {
+            case PlayerType.LeftOnly:
+                HandleLeftOnlyMovement(horizontal);
+                break;
+            case PlayerType.RightOnly:
+                HandleRightOnlyMovement(horizontal);
+                break;
+            case PlayerType.ForwardBackward:
+                HandleForwardBackwardMovement(vertical);
+                break;
+        }
+
+        // Update animator if movement state changed
+        if (wasMoving != isMoving && animator != null)
+        {
+            animator.SetBool("IsWalking", isMoving);
+        }
+    }
+
+    void HandleLeftOnlyMovement(float horizontal)
+    {
+        // Player 1 - moves only left relative to facing direction
+        if (horizontal < -0.1f)
+        {
+            Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
+            transform.Translate(movement, Space.World);
+            isMoving = true;
+        }
+    }
+
+    void HandleRightOnlyMovement(float horizontal)
+    {
+        // Player 2 - moves only right relative to facing direction
+        if (horizontal > 0.1f)
+        {
+            Vector3 movement = transform.right * moveSpeed * horizontal * Time.deltaTime;
+            transform.Translate(movement, Space.World);
+            isMoving = true;
+        }
+    }
+
+    void HandleForwardBackwardMovement(float vertical)
+    {
+        // Player 3 - moves forward/backward relative to facing direction
+        if (vertical > 0.1f) // Forward
+        {
+            Vector3 movement = transform.forward * moveSpeed * vertical * Time.deltaTime;
+            transform.Translate(movement, Space.World);
+            isMoving = true;
+        }
+        else if (vertical < -0.1f) // Backward
+        {
+            Vector3 movement = -transform.forward * moveSpeed * Mathf.Abs(vertical) * Time.deltaTime;
+            transform.Translate(movement, Space.World);
+            isMoving = true;
+        }
     }
 }
 
-void HandleLeftOnlyMovement(float horizontal)
-{
-       // Player 1 - moves only left relative to facing direction
-    if (horizontal < -0.1f)
-    {
-           Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
-        transform.Translate(movement, Space.World);
-    }
-}
 
-void HandleRightOnlyMovement(float horizontal)
-{
-       // Player 2 - moves only right relative to facing direction
-    if (horizontal > 0.1f)
-    {
-           Vector3 movement = transform.right * moveSpeed * horizontal * Time.deltaTime;
-        transform.Translate(movement, Space.World);
-    }
-}
 
-void HandleForwardBackwardMovement(float vertical)
-{
-       // Player 3 - moves forward/backward relative to facing direction
-       if (vertical > 0.1f) // Forward
-    {
-           Vector3 movement = transform.forward * moveSpeed * vertical * Time.deltaTime;
-        transform.Translate(movement, Space.World);
-    }
-       else if (vertical < -0.1f) // Backward
-    {
-           Vector3 movement = -transform.forward * moveSpeed * Mathf.Abs(vertical) * Time.deltaTime;
-        transform.Translate(movement, Space.World);
-    }
-}
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //using UnityEngine;
 
 //public class PlayerMovement : MonoBehaviour
