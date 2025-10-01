@@ -161,6 +161,112 @@
 
 
 
+// using UnityEngine;
+
+// public class PlayerMovement : MonoBehaviour
+// {
+//     public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
+//     public PlayerType playerType;
+//     public float moveSpeed = 5f;
+//     public int gamepadNumber = 1;
+
+//     private Animator animator;
+//     private bool isMoving = false;
+
+//     void Start()
+//     {
+//         // Get the Animator component attached to the same GameObject
+//         animator = GetComponent<Animator>();
+
+//         // If there's no Animator on this object, try to find it in children
+//         if (animator == null)
+//         {
+//             animator = GetComponentInChildren<Animator>();
+//         }
+
+//         // Log warning if no animator found
+//         if (animator == null)
+//         {
+//             Debug.LogWarning("No Animator component found on " + gameObject.name);
+//         }
+//     }
+
+//     void Update()
+//     {
+//         string horizontalAxis = "J" + gamepadNumber + "Horizontal";
+//         string verticalAxis = "J" + gamepadNumber + "Vertical";
+
+//         float horizontal = Input.GetAxis(horizontalAxis);
+//         float vertical = Input.GetAxis(verticalAxis);
+
+//         bool wasMoving = isMoving;
+//         isMoving = false;
+
+//         switch (playerType)
+//         {
+//             case PlayerType.LeftOnly:
+//                 HandleLeftOnlyMovement(horizontal);
+//                 break;
+//             case PlayerType.RightOnly:
+//                 HandleRightOnlyMovement(horizontal);
+//                 break;
+//             case PlayerType.ForwardBackward:
+//                 HandleForwardBackwardMovement(vertical);
+//                 break;
+//         }
+
+//         // Update animator if movement state changed
+//         if (wasMoving != isMoving && animator != null)
+//         {
+//             animator.SetBool("IsWalking", isMoving);
+//         }
+//     }
+
+//     void HandleLeftOnlyMovement(float horizontal)
+//     {
+//         // Player 1 - moves only left relative to facing direction
+//         if (horizontal < -0.1f)
+//         {
+//             Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
+//             transform.Translate(movement, Space.World);
+//             isMoving = true;
+//         }
+//     }
+
+//     void HandleRightOnlyMovement(float horizontal)
+//     {
+//         // Player 2 - moves only right relative to facing direction
+//         if (horizontal > 0.1f)
+//         {
+//             Vector3 movement = transform.right * moveSpeed * horizontal * Time.deltaTime;
+//             transform.Translate(movement, Space.World);
+//             isMoving = true;
+
+//         }
+//     }
+
+//     void HandleForwardBackwardMovement(float vertical)
+//     {
+//         // Player 3 - moves forward/backward relative to facing direction
+//         if (vertical > 0.1f) // Forward
+//         {
+//             Vector3 movement = transform.forward * moveSpeed * vertical * Time.deltaTime;
+//             transform.Translate(movement, Space.World);
+//             isMoving = true;
+//         }
+//         else if (vertical < -0.1f) // Backward
+//         {
+//             Vector3 movement = -transform.forward * moveSpeed * Mathf.Abs(vertical) * Time.deltaTime;
+//             transform.Translate(movement, Space.World);
+//             isMoving = true;
+//         }
+//     }
+// }
+
+
+
+
+
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -168,26 +274,36 @@ public class PlayerMovement : MonoBehaviour
     public enum PlayerType { LeftOnly, RightOnly, ForwardBackward }
     public PlayerType playerType;
     public float moveSpeed = 5f;
+    public float jumpForce = 8f;
     public int gamepadNumber = 1;
-    
+
     private Animator animator;
     private bool isMoving = false;
+    private bool isGrounded = true;
+    private Rigidbody rb;
 
     void Start()
     {
         // Get the Animator component attached to the same GameObject
         animator = GetComponent<Animator>();
-        
+
         // If there's no Animator on this object, try to find it in children
         if (animator == null)
         {
             animator = GetComponentInChildren<Animator>();
         }
-        
+
         // Log warning if no animator found
         if (animator == null)
         {
             Debug.LogWarning("No Animator component found on " + gameObject.name);
+        }
+
+        // Get the Rigidbody component
+        rb = GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            Debug.LogWarning("No Rigidbody component found on " + gameObject.name + ". Jump will not work.");
         }
     }
 
@@ -195,6 +311,7 @@ public class PlayerMovement : MonoBehaviour
     {
         string horizontalAxis = "J" + gamepadNumber + "Horizontal";
         string verticalAxis = "J" + gamepadNumber + "Vertical";
+        string jumpButton = "J" + gamepadNumber + "Jump"; // Assuming you'll set up this input
 
         float horizontal = Input.GetAxis(horizontalAxis);
         float vertical = Input.GetAxis(verticalAxis);
@@ -213,6 +330,12 @@ public class PlayerMovement : MonoBehaviour
             case PlayerType.ForwardBackward:
                 HandleForwardBackwardMovement(vertical);
                 break;
+        }
+
+        // Handle jumping for all player types
+        if (Input.GetButtonDown(jumpButton) && isGrounded && rb != null)
+        {
+            Jump();
         }
 
         // Update animator if movement state changed
@@ -260,7 +383,67 @@ public class PlayerMovement : MonoBehaviour
             isMoving = true;
         }
     }
+
+    void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        isGrounded = false;
+        
+        // // Trigger jump animation if animator exists
+        // if (animator != null)
+        // {
+        //     animator.SetTrigger("Jump");
+        // }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Check if the player has landed on the ground
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+            
+            // Reset jump animation state if needed
+            // if (animator != null)
+            // {
+            //     animator.ResetTrigger("Jump");
+            // }
+        }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        // Continuously check if player is on ground
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        // Player is leaving the ground
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
