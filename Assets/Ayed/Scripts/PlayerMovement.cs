@@ -311,7 +311,7 @@ public class PlayerMovement : MonoBehaviour
     {
         string horizontalAxis = "J" + gamepadNumber + "Horizontal";
         string verticalAxis = "J" + gamepadNumber + "Vertical";
-        string jumpButton = "J" + gamepadNumber + "Jump"; // Assuming you'll set up this input
+        // Assuming you'll set up this input
 
         float horizontal = Input.GetAxis(horizontalAxis);
         float vertical = Input.GetAxis(verticalAxis);
@@ -333,11 +333,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Handle jumping for all player types
-        if (Input.GetButtonDown(jumpButton) && isGrounded && rb != null)
-        {
-            Jump();
-        }
-
+        
         // Update animator if movement state changed
         if (wasMoving != isMoving && animator != null)
         {
