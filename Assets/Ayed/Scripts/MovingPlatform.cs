@@ -57,4 +57,11 @@ public class MovingPlatform : MonoBehaviour
             other.transform.SetParent(originalplayers.transform);
         }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            other.transform.SetParent(transform);
+        }
+    }
 }
