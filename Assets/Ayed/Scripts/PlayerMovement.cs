@@ -346,7 +346,7 @@ public class PlayerMovement : MonoBehaviour
     void HandleLeftOnlyMovement(float horizontal)
     {
         // Player 1 - moves only left relative to facing direction
-        if (horizontal < -0.1f)
+        if (horizontal < -0.1f )
         {
             Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
             transform.Translate(movement, Space.World);
