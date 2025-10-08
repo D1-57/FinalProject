@@ -70,8 +70,8 @@ public class RespawnPlayers : MonoBehaviour
     public void RespawnAllPlayers()
     {
         if (MainPlayer != null) MainPlayer.position = Spawn.position;
-        if (Player1 != null) Player1.position += new Vector3(0, 1, 0);
-        if (Player2 != null) Player2.position += new Vector3(0, 1, 0);
+        if (Player1 != null) Player1.position = Spawn.position;
+        if (Player2 != null) Player2.position = Spawn.position;
 
         Debug.Log("All players respawned at: " + Spawn.position);
     }

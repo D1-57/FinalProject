@@ -33,4 +33,11 @@ public class TrapsSpawn : MonoBehaviour
             RespawnPlayers.instance.RespawnAllPlayers();
         }
     }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.JoystickButton3))
+        {
+            RespawnPlayers.instance.RespawnAllPlayers();
+        }
+    }
 }
