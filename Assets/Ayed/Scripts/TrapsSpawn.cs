@@ -25,11 +25,14 @@ using UnityEngine;
 
 public class TrapsSpawn : MonoBehaviour
 {
+    public AudioSource audio;
+    public AudioClip clip;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player hit trap, respawning...");
+            audio.PlayOneShot(clip);
             RespawnPlayers.instance.RespawnAllPlayers();
         }
     }
