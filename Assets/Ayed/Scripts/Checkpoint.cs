@@ -28,6 +28,8 @@ public class Checkpoint : MonoBehaviour
 {
     public Transform checkSpawn;
     private bool isActivated = false;
+    public AudioSource audio;
+    public AudioClip clip;
 
     void Start()
     {
@@ -49,7 +51,7 @@ public class Checkpoint : MonoBehaviour
             Debug.Log("Checkpoint activated at: " + checkSpawn.position);
 
             // You can add visual effects here like changing color, playing sound, etc.
-            GetComponent<Renderer>().material.color = Color.green;
+            audio.PlayOneShot(clip);
         }
     }
 }

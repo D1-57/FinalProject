@@ -281,6 +281,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving = false;
     private bool isGrounded = true;
     private Rigidbody rb;
+    public AudioSource audio;
+    public AudioClip clip;
 
     void Start()
     {
@@ -370,60 +372,78 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 movement = transform.forward * moveSpeed * vertical * Time.deltaTime;
             transform.Translate(movement, Space.World);
+            //if (audio.isPlaying)
+            //{
+            //    audio.Stop();
+            //}
+            if (!audio.isPlaying)
+            {
+                audio.Play();
+            }
+
             isMoving = true;
         }
         else if (vertical < -0.1f) // Backward
         {
             Vector3 movement = -transform.forward * moveSpeed * Mathf.Abs(vertical) * Time.deltaTime;
             transform.Translate(movement, Space.World);
+            //if (!audio.isPlaying)
+            //{
+            //    audio.Play();
+            //}
+            if (audio.isPlaying)
+            {
+                audio.Stop();
+            }
+
             isMoving = true;
         }
     }
 
-    void Jump()
-    {
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isGrounded = false;
+    //void Jump()
+    //{
+    //    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    //    isGrounded = false;
         
-        // // Trigger jump animation if animator exists
-        // if (animator != null)
-        // {
-        //     animator.SetTrigger("Jump");
-        // }
-    }
+    //    // // Trigger jump animation if animator exists
+    //    // if (animator != null)
+    //    // {
+    //    //     animator.SetTrigger("Jump");
+    //    // }
+    //}
 
-    void OnCollisionEnter(Collision collision)
-    {
-        // Check if the player has landed on the ground
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    // Check if the player has landed on the ground
+    //    if (collision.gameObject.CompareTag("Ground"))
+    //    {
+    //        isGrounded = true;
             
-            // Reset jump animation state if needed
-            // if (animator != null)
-            // {
-            //     animator.ResetTrigger("Jump");
-            // }
-        }
-    }
+    //        // Reset jump animation state if needed
+    //        // if (animator != null)
+    //        // {
+    //        //     animator.ResetTrigger("Jump");
+    //        // }
+    //    }
+    //}
 
-    void OnCollisionStay(Collision collision)
-    {
-        // Continuously check if player is on ground
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
-    }
+    //void OnCollisionStay(Collision collision)
+    //{
+    //    // Continuously check if player is on ground
+    //    if (collision.gameObject.CompareTag("Ground"))
+    //    {
+    //        isGrounded = true;
+    //    }
+    //}
 
-    void OnCollisionExit(Collision collision)
-    {
-        // Player is leaving the ground
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
-    }
+    //void OnCollisionExit(Collision collision)
+    //{
+    //    // Player is leaving the ground
+    //    if (collision.gameObject.CompareTag("Ground"))
+    //    {
+    //        isGrounded = false;
+    //    }
+    //}
 }
 
 

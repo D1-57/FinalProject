@@ -413,6 +413,8 @@ MonoBehaviour:
   moveSpeed: 10
   jumpForce: 8
   gamepadNumber: 3
+  audio: {fileID: 0}
+  clip: {fileID: 0}
 --- !u!54 &1627491527033761010
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -721,6 +723,8 @@ MonoBehaviour:
   moveSpeed: 10
   jumpForce: 8
   gamepadNumber: 3
+  audio: {fileID: 0}
+  clip: {fileID: 0}
 --- !u!54 &3015612636696809771
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1212,6 +1216,8 @@ MonoBehaviour:
   moveSpeed: 10
   jumpForce: 8
   gamepadNumber: 2
+  audio: {fileID: 0}
+  clip: {fileID: 0}
 --- !u!54 &8581984468453086152
 Rigidbody:
   m_ObjectHideFlags: 0
