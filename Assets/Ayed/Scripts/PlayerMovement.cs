@@ -346,9 +346,10 @@ public class PlayerMovement : MonoBehaviour
     void HandleLeftOnlyMovement(float horizontal)
     {
         // Player 1 - moves only left relative to facing direction
-        if (horizontal < -0.1f )
+        if (horizontal < -0.1f)
         {
-            Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
+            // Move in local left direction
+            Vector3 movement = transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
             transform.Translate(movement, Space.World);
             isMoving = true;
         }
@@ -359,11 +360,13 @@ public class PlayerMovement : MonoBehaviour
         // Player 2 - moves only right relative to facing direction
         if (horizontal > 0.1f)
         {
-            Vector3 movement = transform.right * moveSpeed * horizontal * Time.deltaTime;
+            // Move in local right direction  
+            Vector3 movement = -transform.right * moveSpeed * Mathf.Abs(horizontal) * Time.deltaTime;
             transform.Translate(movement, Space.World);
             isMoving = true;
         }
-    }
+    
+}
 
     void HandleForwardBackwardMovement(float vertical)
     {
